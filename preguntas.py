@@ -23,7 +23,7 @@ def pregunta_01():
 
     """
     return tbl0.shape[0]
-print(pregunta_01(),"\n")
+#print(pregunta_01(),"\n")
 
 
 def pregunta_02():
@@ -35,7 +35,7 @@ def pregunta_02():
 
     """
     return tbl0.shape[1]
-print(pregunta_02(),"\n")
+#print(pregunta_02(),"\n")
 
 
 def pregunta_03():
@@ -53,7 +53,7 @@ def pregunta_03():
 
     """
     return tbl0['_c1'].value_counts().sort_index()
-print(pregunta_03(),"\n")
+#print(pregunta_03(),"\n")
 
 def pregunta_04():
     """
@@ -68,7 +68,7 @@ def pregunta_04():
     Name: _c2, dtype: float64
     """
     return tbl0.groupby('_c1')['_c2'].mean()
-print(pregunta_04())
+#print(pregunta_04())
 
 def pregunta_05():
     """
@@ -85,7 +85,7 @@ def pregunta_05():
     Name: _c2, dtype: int64
     """
     return tbl0.groupby('_c1')['_c2'].max()
-print(pregunta_05())
+#print(pregunta_05())
 
 
 def pregunta_06():
@@ -101,7 +101,7 @@ def pregunta_06():
     unique_values_upper = [value.upper() for value in unique_values]  # Convertir a mayúsculas
     unique_values_upper.sort()  # Ordenar alfabéticamente
     return unique_values_upper
-print(pregunta_06(),"\n")
+#print(pregunta_06(),"\n")
 
 def pregunta_07():
     """
@@ -117,7 +117,7 @@ def pregunta_07():
     Name: _c2, dtype: int64
     """
     return tbl0.groupby('_c1')['_c2'].sum()
-print(pregunta_07())
+#print(pregunta_07())
 
 
 def pregunta_08():
@@ -137,7 +137,7 @@ def pregunta_08():
     """
     tbl0['suma'] = tbl0['_c0'] + tbl0['_c2']
     return tbl0
-print(pregunta_08(),"\n")
+#print(pregunta_08(),"\n")
 
 
 def pregunta_09():
@@ -157,7 +157,7 @@ def pregunta_09():
     """
     tbl0['year'] = pd.to_datetime(tbl0['_c3'], errors='coerce').dt.year
     return tbl0
-print(pregunta_09())
+#print(pregunta_09())
 
 
 def pregunta_10():
@@ -183,7 +183,7 @@ def pregunta_10():
     
     # Return the result
     return grouped
-print(pregunta_10())
+#print(pregunta_10())
 
 
 def pregunta_11():
@@ -204,7 +204,7 @@ def pregunta_11():
     """
     grouped = tbl1.groupby('_c0')['_c4'].apply(lambda x: ','.join(sorted(set(x)))).reset_index()
     return grouped
-print(pregunta_11())
+#print(pregunta_11())
 
 
 def pregunta_12():
@@ -225,7 +225,7 @@ def pregunta_12():
     tbl2['_c5'] = tbl2['_c5a'] + ':' + tbl2['_c5b'].astype(str)
     grouped = tbl2.groupby('_c0')['_c5'].apply(lambda x: ','.join(sorted(x))).reset_index()
     return grouped
-print(pregunta_12())
+#print(pregunta_12())
 
 
 def pregunta_13():
@@ -245,4 +245,4 @@ def pregunta_13():
     merged = pd.merge(tbl0, tbl2, on='_c0')
     grouped = merged.groupby('_c1')['_c5b'].sum()
     return grouped
-print(pregunta_13())
+#print(pregunta_13())
