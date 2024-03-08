@@ -14,17 +14,16 @@ tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
 tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
 
 
-
 def pregunta_01():
     """
     ¿Cuál es la cantidad de filas en la tabla `tbl0.tsv`?
 
-    Respuesta
+    Rta/
     40
 
     """
-    return tbl0.shape[0]
-#print(pregunta_01(),"\n")
+    rows = tbl0.shape[0]
+    return rows
 
 
 def pregunta_02():
@@ -35,8 +34,8 @@ def pregunta_02():
     4
 
     """
-    return tbl0.shape[1]
-#print(pregunta_02(),"\n")
+    columns = tbl0.shape[1]
+    return columns
 
 
 def pregunta_03():
@@ -53,8 +52,10 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return tbl0['_c1'].value_counts().sort_index()
-#print(pregunta_03(),"\n")
+    data = tbl0['_c1']
+    count = data.groupby(data).size()
+    return count
+
 
 def pregunta_04():
     """
@@ -68,8 +69,9 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return tbl0.groupby('_c1')['_c2'].mean()
-#print(pregunta_04())
+    average = tbl0.groupby('_c1')['_c2'].mean()
+    return average
+
 
 def pregunta_05():
     """
@@ -85,8 +87,8 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return tbl0.groupby('_c1')['_c2'].max()
-#print(pregunta_05())
+    max = tbl0.groupby('_c1')['_c2'].max()
+    return max
 
 
 def pregunta_06():
@@ -98,11 +100,11 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    unique_values = tbl1['_c4'].unique()  # Obtener valores únicos
-    unique_values_upper = [value.upper() for value in unique_values]  # Convertir a mayúsculas
-    unique_values_upper.sort()  # Ordenar alfabéticamente
-    return unique_values_upper
-#print(pregunta_06(),"\n")
+    values = tbl1['_c4'].unique()
+    upper_values = [value.upper() for value in values]
+
+    return sorted(upper_values)
+
 
 def pregunta_07():
     """
@@ -117,8 +119,8 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return tbl0.groupby('_c1')['_c2'].sum()
-#print(pregunta_07())
+    count = tbl0.groupby('_c1')['_c2'].sum()
+    return count
 
 
 def pregunta_08():
@@ -137,8 +139,8 @@ def pregunta_08():
 
     """
     tbl0['suma'] = tbl0['_c0'] + tbl0['_c2']
+
     return tbl0
-#print(pregunta_08(),"\n")
 
 
 def pregunta_09():
@@ -156,10 +158,9 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    tbl0['year'] = pd.to_datetime(tbl0['_c3'], errors='coerce').dt.year
-    return tbl0
-#print(pregunta_09())
+    tbl0['year'] = tbl0['_c3'].apply(lambda x: x.split('-')[0])
 
+    return tbl0
 
 def pregunta_10():
     """
@@ -175,17 +176,9 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-# Leer el archivo tbl0.tsv
-    tbl0 = pd.read_csv('tbl0.tsv', sep='\t')
-
-    grouped = tbl0.groupby('_c1')['_c2'].apply(lambda x: ':'.join(map(str, x))).reset_index()
-   # Ordenar numéricamente el contenido de cada fila en la columna _c1
-    grouped['_c2'] = grouped['_c2'].apply(lambda x: ':'.join(sorted(x.split(':'), key=int)))
-    
-    # Return the result
-    return grouped
-#print(pregunta_10())
-
+    dataframe = tbl0.groupby('_c1')['_c2'].apply(lambda x: ':'.join(sorted(x.astype(str)))).reset_index()
+    dataframe = dataframe.set_index('_c1')
+    return dataframe
 
 def pregunta_11():
     """
@@ -203,9 +196,8 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    grouped = tbl1.groupby('_c0')['_c4'].apply(lambda x: ','.join(sorted(set(x)))).reset_index()
-    return grouped
-#print(pregunta_11())
+    dataframe = tbl1.groupby('_c0')['_c4'].apply(lambda x: ','.join(sorted(x))).reset_index()
+    return dataframe
 
 
 def pregunta_12():
@@ -223,11 +215,10 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    tbl2['_c5'] = tbl2['_c5a'] + ':' + tbl2['_c5b'].astype(str)
-    grouped = tbl2.groupby('_c0')['_c5'].apply(lambda x: ','.join(sorted(x))).reset_index()
-    return grouped
-#print(pregunta_12())
-
+    dataframe = tbl2.groupby('_c0').apply(lambda x: ','.join(sorted(x['_c5a'] + ':' + x['_c5b'].astype(str))),
+                                          include_groups=False).reset_index()
+    dataframe.rename(columns={0: '_c5'}, inplace=True)
+    return dataframe
 
 def pregunta_13():
     """
@@ -243,7 +234,6 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    merged = pd.merge(tbl0, tbl2, on='_c0')
-    grouped = merged.groupby('_c1')['_c5b'].sum()
-    return grouped
-#print(pregunta_13())
+    dataframe = tbl0.merge(tbl2, on='_c0')
+    dataframe = dataframe.groupby('_c1')['_c5b'].sum()
+    return dataframe
